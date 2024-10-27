@@ -4,4 +4,7 @@ from library.models import Users
 class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
-        fields = '__all__'
+        fields = ['username', 'phone_number', 'email', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
