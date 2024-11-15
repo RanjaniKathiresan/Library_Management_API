@@ -1,13 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .serializers import SignUpSerializer, BookSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from django.contrib.auth import logout
 
 
-# Create your views here.
+def logout_view(request):
+    logout(request)
+    return redirect('register') 
+
 
 class RegisterUser(APIView):
     def post(self, request):
@@ -19,7 +23,7 @@ class RegisterUser(APIView):
 
 class AddBooks(APIView):
     authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated] 
+    permission_classes = [IsAdminUser] 
     
     def post(self, request):
         serializer = BookSerializer(data=request.data)
